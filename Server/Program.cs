@@ -9,7 +9,7 @@ namespace Server
     {
         static ConcurrentDictionary<Guid, ClientObject> clients = new ConcurrentDictionary<Guid, ClientObject>();
         static ConcurrentDictionary<string, GameRoom> rooms = new ConcurrentDictionary<string, GameRoom>();
-
+        //static Leaderboard leaderboard =new Leaderboard("leaderboard.json");
         static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -130,7 +130,13 @@ namespace Server
                     if (client.CurrentRoom != null)
                     { 
                         int index = int.Parse(parts[1]);
-                        await client.CurrentRoom.HandleMoveAsync(client, index);
+                        var currentRoom = client.CurrentRoom;
+                       bool finished = await currentRoom.HandleMoveAsync(client, index);
+                        if (finished)
+                        {
+                            rooms.TryRemove(currentRoom.Name, out _);
+                            await BroadcastLobbyList();
+                        }
                     }
                     break;
                 case "REFRESH_LOBBY":

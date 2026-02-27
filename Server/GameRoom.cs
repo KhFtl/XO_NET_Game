@@ -38,9 +38,9 @@ namespace Server
             await Player2!.SendMessageAsync($"GAME_START|O|{Player1!.Nickname}");
         }
 
-        public async Task HandleMoveAsync(ClientObject player, int index)
+        public async Task<bool> HandleMoveAsync(ClientObject player, int index)
         {
-            if (player != currentPlayer || board[index] != 0) return;
+            if (player != currentPlayer || board[index] != 0) return false;
             int symbolId = (player == Player1) ? 1 : 2;
             string symbolStr = (player == Player1) ? "X" : "O";
             board[index] = symbolId;
@@ -50,17 +50,20 @@ namespace Server
             {
                 await Broadcast($"WIN|{player.Nickname}");
                 await EndGame();
+                return true;
             }
             else if (board.All(x => x != 0))
             {
                 await Broadcast("DRAW");
                 await EndGame();
+                return true;
             }
             else
             { 
                 currentPlayer = (currentPlayer == Player1) ? Player2 : Player1;
                 string nextTurnNick = currentPlayer!.Nickname;
                 await Broadcast($"TURN|{nextTurnNick}");
+                return false;
             }
         }
 
