@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace Server
         public bool IsFull => Player2 != null;
         private int[] board = new int[9];
         private ClientObject? currentPlayer;
+        public event Action<string, string>? OnWin; //w:l
+        public event Action<string,string>? OnDraw; //p1:p2
 
         public GameRoom(string name, ClientObject creator)
         {
@@ -49,12 +52,19 @@ namespace Server
             if (CheckWin(symbolId))
             {
                 await Broadcast($"WIN|{player.Nickname}");
+                var loser = (player == Player1) ? Player2 : Player1;
+                if (loser != null)
+                {
+                    OnWin?.Invoke(player.Nickname, loser.Nickname);
+                }
                 await EndGame();
                 return true;
             }
             else if (board.All(x => x != 0))
             {
                 await Broadcast("DRAW");
+                if (Player1 != null && Player2 != null)
+                    OnDraw?.Invoke(Player1.Nickname, Player2.Nickname);
                 await EndGame();
                 return true;
             }

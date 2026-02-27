@@ -25,6 +25,7 @@ namespace Server
             {
                 return;
             }
+            msg += "\n";
             byte[] data = Encoding.UTF8.GetBytes(msg);
             await Stream.WriteAsync(data, 0, data.Length);
         }

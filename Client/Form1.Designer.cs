@@ -52,9 +52,19 @@
             button1 = new Button();
             groupBox3 = new GroupBox();
             lst_Rooms = new ListBox();
+            groupBox4 = new GroupBox();
+            dgv_Leaderboard = new DataGridView();
+            Place = new DataGridViewTextBoxColumn();
+            Nick = new DataGridViewTextBoxColumn();
+            Wins = new DataGridViewTextBoxColumn();
+            Losses = new DataGridViewTextBoxColumn();
+            Draws = new DataGridViewTextBoxColumn();
+            Games = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgv_Leaderboard).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -72,14 +82,14 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(13, 10);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(1454, 229);
+            groupBox1.Size = new Size(1093, 229);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Керування";
             // 
             // btn_updateRoom
             // 
-            btn_updateRoom.Location = new Point(598, 165);
+            btn_updateRoom.Location = new Point(487, 163);
             btn_updateRoom.Name = "btn_updateRoom";
             btn_updateRoom.Size = new Size(233, 47);
             btn_updateRoom.TabIndex = 17;
@@ -89,7 +99,7 @@
             // 
             // btn_createRoom
             // 
-            btn_createRoom.Location = new Point(598, 103);
+            btn_createRoom.Location = new Point(487, 101);
             btn_createRoom.Name = "btn_createRoom";
             btn_createRoom.Size = new Size(233, 47);
             btn_createRoom.TabIndex = 16;
@@ -101,7 +111,7 @@
             // 
             txt_roomName.Location = new Point(196, 108);
             txt_roomName.Name = "txt_roomName";
-            txt_roomName.Size = new Size(396, 39);
+            txt_roomName.Size = new Size(275, 39);
             txt_roomName.TabIndex = 15;
             txt_roomName.Text = "MyRoom";
             // 
@@ -117,7 +127,7 @@
             // 
             // txt_NickName
             // 
-            txt_NickName.Location = new Point(884, 39);
+            txt_NickName.Location = new Point(824, 37);
             txt_NickName.Name = "txt_NickName";
             txt_NickName.Size = new Size(251, 39);
             txt_NickName.TabIndex = 13;
@@ -127,7 +137,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label4.Location = new Point(817, 46);
+            label4.Location = new Point(757, 44);
             label4.Name = "label4";
             label4.Size = new Size(52, 32);
             label4.TabIndex = 12;
@@ -135,7 +145,7 @@
             // 
             // btn_Connect
             // 
-            btn_Connect.Location = new Point(1141, 36);
+            btn_Connect.Location = new Point(757, 82);
             btn_Connect.Name = "btn_Connect";
             btn_Connect.Size = new Size(192, 42);
             btn_Connect.TabIndex = 11;
@@ -145,7 +155,7 @@
             // 
             // txt_ServerPort
             // 
-            txt_ServerPort.Location = new Point(677, 43);
+            txt_ServerPort.Location = new Point(566, 41);
             txt_ServerPort.Name = "txt_ServerPort";
             txt_ServerPort.Size = new Size(106, 39);
             txt_ServerPort.TabIndex = 10;
@@ -153,9 +163,9 @@
             // 
             // txt_IpServer
             // 
-            txt_IpServer.Location = new Point(105, 45);
+            txt_IpServer.Location = new Point(196, 45);
             txt_IpServer.Name = "txt_IpServer";
-            txt_IpServer.Size = new Size(487, 39);
+            txt_IpServer.Size = new Size(275, 39);
             txt_IpServer.TabIndex = 9;
             txt_IpServer.Text = "127.0.0.1";
             // 
@@ -163,7 +173,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label2.Location = new Point(598, 50);
+            label2.Location = new Point(487, 48);
             label2.Name = "label2";
             label2.Size = new Size(73, 32);
             label2.TabIndex = 8;
@@ -292,7 +302,7 @@
             groupBox3.Controls.Add(lst_Rooms);
             groupBox3.Location = new Point(728, 245);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(739, 439);
+            groupBox3.Size = new Size(378, 439);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Кімнати";
@@ -303,15 +313,85 @@
             lst_Rooms.ItemHeight = 31;
             lst_Rooms.Location = new Point(6, 59);
             lst_Rooms.Name = "lst_Rooms";
-            lst_Rooms.Size = new Size(727, 376);
+            lst_Rooms.Size = new Size(354, 376);
             lst_Rooms.TabIndex = 0;
             lst_Rooms.DoubleClick += lst_Rooms_DoubleClick;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(dgv_Leaderboard);
+            groupBox4.Location = new Point(1112, 26);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(533, 654);
+            groupBox4.TabIndex = 3;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Таблиця лідерів";
+            // 
+            // dgv_Leaderboard
+            // 
+            dgv_Leaderboard.AllowUserToAddRows = false;
+            dgv_Leaderboard.AllowUserToDeleteRows = false;
+            dgv_Leaderboard.AllowUserToResizeColumns = false;
+            dgv_Leaderboard.AllowUserToResizeRows = false;
+            dgv_Leaderboard.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_Leaderboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_Leaderboard.Columns.AddRange(new DataGridViewColumn[] { Place, Nick, Wins, Losses, Draws, Games });
+            dgv_Leaderboard.GridColor = SystemColors.HighlightText;
+            dgv_Leaderboard.Location = new Point(6, 38);
+            dgv_Leaderboard.Name = "dgv_Leaderboard";
+            dgv_Leaderboard.ReadOnly = true;
+            dgv_Leaderboard.RowHeadersWidth = 51;
+            dgv_Leaderboard.Size = new Size(519, 610);
+            dgv_Leaderboard.TabIndex = 0;
+            // 
+            // Place
+            // 
+            Place.HeaderText = "#";
+            Place.MinimumWidth = 6;
+            Place.Name = "Place";
+            Place.ReadOnly = true;
+            // 
+            // Nick
+            // 
+            Nick.HeaderText = "Nick";
+            Nick.MinimumWidth = 6;
+            Nick.Name = "Nick";
+            Nick.ReadOnly = true;
+            // 
+            // Wins
+            // 
+            Wins.HeaderText = "W";
+            Wins.MinimumWidth = 6;
+            Wins.Name = "Wins";
+            Wins.ReadOnly = true;
+            // 
+            // Losses
+            // 
+            Losses.HeaderText = "L";
+            Losses.MinimumWidth = 6;
+            Losses.Name = "Losses";
+            Losses.ReadOnly = true;
+            // 
+            // Draws
+            // 
+            Draws.HeaderText = "D";
+            Draws.MinimumWidth = 6;
+            Draws.Name = "Draws";
+            Draws.ReadOnly = true;
+            // 
+            // Games
+            // 
+            Games.HeaderText = "Games";
+            Games.MinimumWidth = 6;
+            Games.Name = "Games";
+            Games.ReadOnly = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 31F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1479, 696);
+            ClientSize = new Size(1649, 696);
+            Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -325,6 +405,8 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgv_Leaderboard).EndInit();
             ResumeLayout(false);
         }
 
@@ -354,5 +436,13 @@
         private Button btn_createRoom;
         private TextBox txt_roomName;
         private Label label3;
+        private GroupBox groupBox4;
+        private DataGridView dgv_Leaderboard;
+        private DataGridViewTextBoxColumn Place;
+        private DataGridViewTextBoxColumn Nick;
+        private DataGridViewTextBoxColumn Wins;
+        private DataGridViewTextBoxColumn Losses;
+        private DataGridViewTextBoxColumn Draws;
+        private DataGridViewTextBoxColumn Games;
     }
 }

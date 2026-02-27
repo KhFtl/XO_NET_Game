@@ -24,6 +24,28 @@ namespace Client
             gameButtons = new Button[] { button1, button2, button3, button4, button5, button6, button7, button8, button9 };
             groupBox2.Enabled = false;
             groupBox3.Enabled = false;
+            SetupLeaderboardGrid();
+        }
+
+        private void SetupLeaderboardGrid()
+        {
+            dgv_Leaderboard.ReadOnly = true;
+            dgv_Leaderboard.AllowUserToAddRows = false;
+            dgv_Leaderboard.AllowUserToDeleteRows = false;
+            dgv_Leaderboard.AllowUserToResizeRows = false;
+            dgv_Leaderboard.RowHeadersVisible = false;
+            dgv_Leaderboard.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_Leaderboard.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            if (dgv_Leaderboard.Columns.Count == 0)
+            {
+                dgv_Leaderboard.Columns.Add("Place", "#");
+                dgv_Leaderboard.Columns.Add("Nick", "Nick");
+                dgv_Leaderboard.Columns.Add("Wins", "W");
+                dgv_Leaderboard.Columns.Add("Losses", "L");
+                dgv_Leaderboard.Columns.Add("Draws", "D");
+                dgv_Leaderboard.Columns.Add("Games", "Games");
+            }
         }
 
         private async Task SendPacket(string msg)
@@ -31,6 +53,7 @@ namespace Client
             if (!isConnected) return;
             try
             {
+                msg += "\n";
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 await stream.WriteAsync(data, 0, data.Length);
             }
@@ -74,6 +97,7 @@ namespace Client
                 stream = client.GetStream();
                 _ = ListenForPackets();
                 await SendPacket($"LOGIN|{NickName}");
+                await SendPacket("GET_LEADERBOARD|10");
                 groupBox2.Enabled = true;
                 groupBox3.Enabled = true;
                 groupBox1.Text = $"Підключено як: {NickName}";
@@ -88,24 +112,39 @@ namespace Client
         private async Task ListenForPackets()
         {
             byte[] buffer = new byte[1024];
+            var sb = new StringBuilder();
+
             while (isConnected)
             {
                 try
                 {
                     int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (bytesRead == 0) break; // Сервер закрив з'єднання
-                    string msg = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    this.Invoke((MethodInvoker)delegate
+                    if (bytesRead == 0) break;
+
+                    sb.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+
+                    while (true)
                     {
-                        ProcessServerMessage(msg);
-                    });
+                        string all = sb.ToString();
+                        int nl = all.IndexOf('\n');
+                        if (nl < 0) break;
+
+                        string oneMsg = all.Substring(0, nl).Trim('\r');
+                        sb.Remove(0, nl + 1);
+
+                        if (!string.IsNullOrWhiteSpace(oneMsg))
+                        {
+                            this.Invoke((MethodInvoker)(() => ProcessServerMessage(oneMsg)));
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     isConnected = false;
                     this.Invoke((MethodInvoker)delegate
                     {
-                        MessageBox.Show($"Помилка з'єднання: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Помилка з'єднання: {ex.Message}", "Помилка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                         groupBox2.Enabled = false;
                         groupBox3.Enabled = false;
                         groupBox1.Text = "Не підключено";
@@ -117,6 +156,7 @@ namespace Client
 
         private void ProcessServerMessage(string msg)
         {
+            Console.WriteLine("SERVER -> " + msg);
             string[] parts = msg.Split('|');
             string command = parts[0];
             switch (command)
@@ -150,10 +190,14 @@ namespace Client
                 case "WIN":
                     MessageBox.Show($"Гра завершена! Переміг: {parts[1]}", "Гра завершена", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetGameUI();
+                    _ = SendPacket("GET_LEADERBOARD|10");
+                    
                     break;
                 case "DRAW":
                     MessageBox.Show("Гра завершена! Нічия!", "Гра завершена", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetGameUI();
+                    _ = SendPacket("GET_LEADERBOARD|10");
+                    
                     break;
                 case "OPPONENT_LEFT":
                     MessageBox.Show("Ваш супротивник вийшов з гри!", "Гра завершена", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -162,6 +206,38 @@ namespace Client
                 case "ERROR":
                     MessageBox.Show($"Помилка від сервера: {parts[1]}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
+                case "LEADERBOARD":
+                    RenderLeaderboard(parts.Length > 1 ? parts[1]:"");
+                    break;
+            }
+        }
+
+        private void RenderLeaderboard(string payload)
+        {
+            dgv_Leaderboard.Rows.Clear();
+            if (string.IsNullOrEmpty(payload)) return;
+
+            var items = payload.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+            int place = 1;
+            foreach (var item in items) 
+            {
+                var parts = item.Split(':');
+                if (parts.Length < 5) continue;
+
+                string nick = parts[0];
+                int wins = int.TryParse(parts[1], out var w) ? w : 0;
+                int losses = int.TryParse(parts[2], out var l) ? l : 0;
+                int draws = int.TryParse(parts[3], out var d) ? d : 0;
+                int games = int.TryParse(parts[4], out var g) ? g : 0;
+
+                int rowIndex = dgv_Leaderboard.Rows.Add(place, nick, wins, losses, draws, games);
+
+                if (place == 1) dgv_Leaderboard.Rows[rowIndex].DefaultCellStyle.BackColor = Color.Gold;
+                else if (place == 2) dgv_Leaderboard.Rows[rowIndex].DefaultCellStyle.BackColor = Color.Silver;
+                else if (place == 3) dgv_Leaderboard.Rows[rowIndex].DefaultCellStyle.BackColor = Color.Peru;
+
+                place++;
             }
         }
 
@@ -233,6 +309,7 @@ namespace Client
         private async void btn_updateRoom_Click(object sender, EventArgs e)
         {
             await SendPacket("REFRESH_LOBBY");
+            await SendPacket("GET_LEADERBOARD|10");
         }
     }
 }

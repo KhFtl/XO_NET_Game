@@ -9,7 +9,7 @@ namespace Server
     {
         static ConcurrentDictionary<Guid, ClientObject> clients = new ConcurrentDictionary<Guid, ClientObject>();
         static ConcurrentDictionary<string, GameRoom> rooms = new ConcurrentDictionary<string, GameRoom>();
-        //static Leaderboard leaderboard =new Leaderboard("leaderboard.json");
+        static Leaderboard leaderboard = new Leaderboard("leaderboard.json");
         static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -18,7 +18,7 @@ namespace Server
             Console.Title = "Сервер гри Хрестики - Нолики";
             var config = ServerConfig.LoadOrAsk();
             if (config == null)
-            { 
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Помилка в файлі конфігурації :( видаліть файл та спробуйте знову");
                 Console.ResetColor();
@@ -43,13 +43,29 @@ namespace Server
             try
             {
                 byte[] buffer = new byte[1024];
+                var sb = new StringBuilder();
+
                 while (client.Client.Connected)
                 {
                     int bytesRead = await client.Stream.ReadAsync(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"[{client.Nickname ?? client.Id.ToString()}] -> {message}");
-                    await ProcessMessageAsync(client, message);
+
+                    sb.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+
+                    while (true)
+                    {
+                        string all = sb.ToString();
+                        int nl = all.IndexOf('\n');
+                        if (nl < 0) break;
+
+                        string oneMsg = all.Substring(0, nl).Trim('\r');
+                        sb.Remove(0, nl + 1);
+
+                        if (string.IsNullOrWhiteSpace(oneMsg)) continue;
+
+                        Console.WriteLine($"[{client.Nickname ?? client.Id.ToString()}] -> {oneMsg}");
+                        await ProcessMessageAsync(client, oneMsg);
+                    }
                 }
             }
             catch (Exception ex)
@@ -68,7 +84,7 @@ namespace Server
         {
             clients.TryRemove(client.Id, out _);
             if (client.CurrentRoom != null)
-            { 
+            {
                 await client.CurrentRoom.PlayerDisconnected(client);
                 rooms.TryRemove(client.CurrentRoom.Name, out _);
                 await BroadcastLobbyList();
@@ -88,13 +104,17 @@ namespace Server
 
         private static async Task ProcessMessageAsync(ClientObject client, string message)
         {
+            if (string.IsNullOrWhiteSpace(message)) return;
             var parts = message.Split('|');
             string command = parts[0];
             switch (command)
             {
                 case "LOGIN":
+                    if (parts.Length < 2) { await client.SendMessageAsync("ERROR|Bad LOGIN"); break; }
                     client.Nickname = parts[1];
+                    leaderboard.EnsurePlayer(client.Nickname);
                     await SendLobbyList(client);
+                    await client.SendMessageAsync($"LEADERBOARD|{leaderboard.GetTop(10)}");
                     break;
                 case "CREATE_ROOM":
                     string roomName = parts[1];
@@ -104,6 +124,8 @@ namespace Server
                         return;
                     }
                     var newRoom = new GameRoom(roomName, client);
+                    newRoom.OnWin += (winner, loser) => leaderboard.RecWin(winner, loser);
+                    newRoom.OnDraw += (player1, player2) => leaderboard.RecDraw(player1, player2);
                     rooms.TryAdd(roomName, newRoom);
                     client.CurrentRoom = newRoom;
                     await BroadcastLobbyList();
@@ -115,7 +137,7 @@ namespace Server
                     if (rooms.TryGetValue(targetRoom, out var room))
                     {
                         if (room.TryJoin(client))
-                        { 
+                        {
                             client.CurrentRoom = room;
                             await BroadcastLobbyList();
                             await room.StartGame();
@@ -128,19 +150,27 @@ namespace Server
                     break;
                 case "MOVE":
                     if (client.CurrentRoom != null)
-                    { 
+                    {
                         int index = int.Parse(parts[1]);
                         var currentRoom = client.CurrentRoom;
-                       bool finished = await currentRoom.HandleMoveAsync(client, index);
+                        bool finished = await currentRoom.HandleMoveAsync(client, index);
                         if (finished)
                         {
                             rooms.TryRemove(currentRoom.Name, out _);
                             await BroadcastLobbyList();
+                            await BroadcastLeaderboard(10);
                         }
                     }
                     break;
                 case "REFRESH_LOBBY":
                     await SendLobbyList(client);
+                    break;
+                case "GET_LEADERBOARD":
+                    int top = 10;
+                    if (parts.Length > 1)
+                        int.TryParse(parts[1], out top);
+                    string payload = leaderboard.GetTop(top);
+                    await client.SendMessageAsync($"LEADERBOARD|{payload}");
                     break;
             }
         }
@@ -150,6 +180,15 @@ namespace Server
             var openRooms = rooms.Values.Where(r => !r.IsFull).Select(r => r.Name);
             string list = string.Join(",", openRooms);
             await client.SendMessageAsync($"LOBBY_LIST|{list}");
+        }
+
+        private static async Task BroadcastLeaderboard(int top = 10)
+        {
+            string payload = leaderboard.GetTop(top);
+            foreach (var client in clients.Values.Where(x => x.CurrentRoom == null))
+            {
+                await client.SendMessageAsync($"LEADERBOARD|{payload}");
+            }
         }
     }
 }
