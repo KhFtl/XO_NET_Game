@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -12,7 +12,7 @@ namespace Server
         public Guid Id { get; } = Guid.NewGuid();
         public TcpClient Client { get; }
         public NetworkStream Stream { get; }
-        public string Nickname { get; set; }
+        public string? Nickname { get; set; }
         public GameRoom? CurrentRoom { get; set; } = null;
         public ClientObject(TcpClient client)
         { 
