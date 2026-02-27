@@ -8,7 +8,7 @@ namespace Server
     internal class Program
     {
         static ConcurrentDictionary<Guid, ClientObject> clients = new ConcurrentDictionary<Guid, ClientObject>();
-        static ConcurrentDictionary<string, GameRoom> rooms = new ConcurrentDictionary<string, GameRoom>();
+        public static ConcurrentDictionary<string, GameRoom> rooms = new ConcurrentDictionary<string, GameRoom>();
 
         static async Task Main(string[] args)
         {
@@ -68,9 +68,10 @@ namespace Server
         {
             clients.TryRemove(client.Id, out _);
             if (client.CurrentRoom != null)
-            { 
+            {
+                var roomName = client.CurrentRoom.Name;
                 await client.CurrentRoom.PlayerDisconnected(client);
-                rooms.TryRemove(client.CurrentRoom.Name, out _);
+                rooms.TryRemove(roomName, out _);
                 await BroadcastLobbyList();
             }
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -78,7 +79,7 @@ namespace Server
             Console.ResetColor();
         }
 
-        private static async Task BroadcastLobbyList()
+        public static async Task BroadcastLobbyList()
         {
             foreach (var client in clients.Values.Where(x => x.CurrentRoom == null))
             {

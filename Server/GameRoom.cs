@@ -104,8 +104,20 @@ namespace Server
 
         private async Task EndGame()
         {
+            await Player1.SendMessageAsync($"GAME_OVER|");
+            if (Player2 != null)
+                await Player2.SendMessageAsync($"GAME_OVER|");
+
+            // Очищаємо посилання на кімнату
             Player1.CurrentRoom = null;
-            if(Player2 != null) Player2.CurrentRoom = null;
+            if (Player2 != null)
+                Player2.CurrentRoom = null;
+
+            // Видаляємо кімнату із загального списку
+            Program.rooms.TryRemove(Name, out _);
+
+            // Оновлюємо лоббі
+            await Program.BroadcastLobbyList();
         }
 
         private async Task Broadcast(string msg)
