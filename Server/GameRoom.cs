@@ -72,6 +72,8 @@ namespace Server
                 await other.SendMessageAsync("OPPONENT_LEFT");
                 other.CurrentRoom = null;
             }
+
+            Program.RemoveRoom(Name);
         }
 
         private bool CheckWin(int symbolId)
@@ -106,6 +108,8 @@ namespace Server
         {
             Player1.CurrentRoom = null;
             if(Player2 != null) Player2.CurrentRoom = null;
+
+            Program.RemoveRoom(Name);
         }
 
         private async Task Broadcast(string msg)
