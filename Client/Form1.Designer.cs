@@ -29,9 +29,10 @@ namespace Client
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            button10 = new Button();
+            btn_showLeaderboard = new Button();
+            btn_updateRoom = new Button();
             btn_createRoom = new Button();
-            textBox1 = new TextBox();
+            txt_roomName = new TextBox();
             label3 = new Label();
             txt_NickName = new TextBox();
             label4 = new Label();
@@ -59,9 +60,10 @@ namespace Client
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(button10);
+            groupBox1.Controls.Add(btn_showLeaderboard);
+            groupBox1.Controls.Add(btn_updateRoom);
             groupBox1.Controls.Add(btn_createRoom);
-            groupBox1.Controls.Add(textBox1);
+            groupBox1.Controls.Add(txt_roomName);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(txt_NickName);
             groupBox1.Controls.Add(label4);
@@ -77,14 +79,25 @@ namespace Client
             groupBox1.TabStop = false;
             groupBox1.Text = "Керування";
             // 
-            // button10
+            // btn_showLeaderboard
             // 
-            button10.Location = new Point(598, 165);
-            button10.Name = "button10";
-            button10.Size = new Size(233, 47);
-            button10.TabIndex = 17;
-            button10.Text = "Оновити кімнати";
-            button10.UseVisualStyleBackColor = true;
+            btn_showLeaderboard.Location = new Point(837, 165);
+            btn_showLeaderboard.Name = "btn_showLeaderboard";
+            btn_showLeaderboard.Size = new Size(233, 47);
+            btn_showLeaderboard.TabIndex = 18;
+            btn_showLeaderboard.Text = "🏆 Таблиця лідерів";
+            btn_showLeaderboard.UseVisualStyleBackColor = true;
+            btn_showLeaderboard.Click += btn_showLeaderboard_Click;
+            // 
+            // btn_updateRoom
+            // 
+            btn_updateRoom.Location = new Point(598, 165);
+            btn_updateRoom.Name = "btn_updateRoom";
+            btn_updateRoom.Size = new Size(233, 47);
+            btn_updateRoom.TabIndex = 17;
+            btn_updateRoom.Text = "🔄 Оновити кімнати";
+            btn_updateRoom.UseVisualStyleBackColor = true;
+            btn_updateRoom.Click += btn_updateRoom_Click;
             // 
             // btn_createRoom
             // 
@@ -92,16 +105,17 @@ namespace Client
             btn_createRoom.Name = "btn_createRoom";
             btn_createRoom.Size = new Size(233, 47);
             btn_createRoom.TabIndex = 16;
-            btn_createRoom.Text = "Створити";
+            btn_createRoom.Text = "➕ Створити кімнату";
             btn_createRoom.UseVisualStyleBackColor = true;
+            btn_createRoom.Click += btn_createRoom_Click;
             // 
-            // textBox1
+            // txt_roomName
             // 
-            textBox1.Location = new Point(196, 108);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(396, 39);
-            textBox1.TabIndex = 15;
-            textBox1.Text = "My Room";
+            txt_roomName.Location = new Point(196, 108);
+            txt_roomName.Name = "txt_roomName";
+            txt_roomName.Size = new Size(396, 39);
+            txt_roomName.TabIndex = 15;
+            txt_roomName.Text = "MyRoom";
             // 
             // label3
             // 
@@ -119,17 +133,17 @@ namespace Client
             txt_NickName.Name = "txt_NickName";
             txt_NickName.Size = new Size(251, 39);
             txt_NickName.TabIndex = 13;
-            txt_NickName.Text = "Vetal";
+            txt_NickName.Text = "Гравець";
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label4.Location = new Point(817, 46);
+            label4.Location = new Point(789, 46);
             label4.Name = "label4";
-            label4.Size = new Size(52, 32);
+            label4.Size = new Size(89, 32);
             label4.TabIndex = 12;
-            label4.Text = "Нік";
+            label4.Text = "Нікнейм";
             // 
             // btn_Connect
             // 
@@ -201,7 +215,7 @@ namespace Client
             button9.Name = "button9";
             button9.Size = new Size(184, 83);
             button9.TabIndex = 8;
-            button9.Text = "button9";
+            button9.Text = "";
             button9.UseVisualStyleBackColor = true;
             button9.Click += button1_Click;
             // 
@@ -211,7 +225,7 @@ namespace Client
             button8.Name = "button8";
             button8.Size = new Size(184, 83);
             button8.TabIndex = 7;
-            button8.Text = "button8";
+            button8.Text = "";
             button8.UseVisualStyleBackColor = true;
             button8.Click += button1_Click;
             // 
@@ -221,7 +235,7 @@ namespace Client
             button7.Name = "button7";
             button7.Size = new Size(184, 83);
             button7.TabIndex = 6;
-            button7.Text = "button7";
+            button7.Text = "";
             button7.UseVisualStyleBackColor = true;
             button7.Click += button1_Click;
             // 
@@ -231,7 +245,7 @@ namespace Client
             button6.Name = "button6";
             button6.Size = new Size(184, 83);
             button6.TabIndex = 5;
-            button6.Text = "button6";
+            button6.Text = "";
             button6.UseVisualStyleBackColor = true;
             button6.Click += button1_Click;
             // 
@@ -241,7 +255,7 @@ namespace Client
             button5.Name = "button5";
             button5.Size = new Size(184, 83);
             button5.TabIndex = 4;
-            button5.Text = "button5";
+            button5.Text = "";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button1_Click;
             // 
@@ -251,8 +265,8 @@ namespace Client
             button4.Name = "button4";
             button4.Size = new Size(184, 83);
             button4.TabIndex = 3;
-            button4.Text = "button4";
-            button4.UseVisualStyleBackColor = true;
+            button4.Text = "";
+            button8.UseVisualStyleBackColor = true;
             button4.Click += button1_Click;
             // 
             // button3
@@ -261,7 +275,7 @@ namespace Client
             button3.Name = "button3";
             button3.Size = new Size(184, 83);
             button3.TabIndex = 2;
-            button3.Text = "button3";
+            button3.Text = "";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button1_Click;
             // 
@@ -271,7 +285,7 @@ namespace Client
             button2.Name = "button2";
             button2.Size = new Size(184, 83);
             button2.TabIndex = 1;
-            button2.Text = "button2";
+            button2.Text = "";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button1_Click;
             // 
@@ -281,7 +295,7 @@ namespace Client
             button1.Name = "button1";
             button1.Size = new Size(184, 83);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -293,7 +307,7 @@ namespace Client
             groupBox3.Size = new Size(739, 439);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Кімнати";
+            groupBox3.Text = "🎮 Доступні кімнати";
             // 
             // lst_Rooms
             // 
@@ -303,6 +317,7 @@ namespace Client
             lst_Rooms.Name = "lst_Rooms";
             lst_Rooms.Size = new Size(727, 376);
             lst_Rooms.TabIndex = 0;
+            lst_Rooms.DoubleClick += lst_Rooms_DoubleClick;
             // 
             // Form1
             // 
@@ -317,7 +332,7 @@ namespace Client
             MaximizeBox = false;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Client for X_O Game";
+            Text = "Хрестики-Нолики Online | Client";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -347,9 +362,10 @@ namespace Client
         private Button button1;
         private GroupBox groupBox3;
         private ListBox lst_Rooms;
-        private Button button10;
+        private Button btn_updateRoom;
         private Button btn_createRoom;
-        private TextBox textBox1;
+        private TextBox txt_roomName;
         private Label label3;
+        private Button btn_showLeaderboard;
     }
 }
