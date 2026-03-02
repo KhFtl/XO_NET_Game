@@ -69,6 +69,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = Color.AntiqueWhite;
             groupBox1.Controls.Add(btn_updateRoom);
             groupBox1.Controls.Add(btn_createRoom);
             groupBox1.Controls.Add(txt_roomName);
@@ -89,26 +90,29 @@
             // 
             // btn_updateRoom
             // 
+            btn_updateRoom.BackColor = Color.Bisque;
             btn_updateRoom.Location = new Point(487, 163);
             btn_updateRoom.Name = "btn_updateRoom";
             btn_updateRoom.Size = new Size(233, 47);
             btn_updateRoom.TabIndex = 17;
             btn_updateRoom.Text = "Оновити кімнати";
-            btn_updateRoom.UseVisualStyleBackColor = true;
+            btn_updateRoom.UseVisualStyleBackColor = false;
             btn_updateRoom.Click += btn_updateRoom_Click;
             // 
             // btn_createRoom
             // 
+            btn_createRoom.BackColor = Color.Bisque;
             btn_createRoom.Location = new Point(487, 101);
             btn_createRoom.Name = "btn_createRoom";
             btn_createRoom.Size = new Size(233, 47);
             btn_createRoom.TabIndex = 16;
             btn_createRoom.Text = "Створити";
-            btn_createRoom.UseVisualStyleBackColor = true;
+            btn_createRoom.UseVisualStyleBackColor = false;
             btn_createRoom.Click += btn_createRoom_Click;
             // 
             // txt_roomName
             // 
+            txt_roomName.BackColor = Color.Bisque;
             txt_roomName.Location = new Point(196, 108);
             txt_roomName.Name = "txt_roomName";
             txt_roomName.Size = new Size(275, 39);
@@ -127,6 +131,7 @@
             // 
             // txt_NickName
             // 
+            txt_NickName.BackColor = Color.Bisque;
             txt_NickName.Location = new Point(824, 37);
             txt_NickName.Name = "txt_NickName";
             txt_NickName.Size = new Size(251, 39);
@@ -137,7 +142,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            label4.Location = new Point(757, 44);
+            label4.Location = new Point(757, 45);
             label4.Name = "label4";
             label4.Size = new Size(52, 32);
             label4.TabIndex = 12;
@@ -145,16 +150,18 @@
             // 
             // btn_Connect
             // 
-            btn_Connect.Location = new Point(757, 82);
+            btn_Connect.BackColor = Color.PaleGreen;
+            btn_Connect.Location = new Point(757, 101);
             btn_Connect.Name = "btn_Connect";
             btn_Connect.Size = new Size(192, 42);
             btn_Connect.TabIndex = 11;
             btn_Connect.Text = "Підключитись";
-            btn_Connect.UseVisualStyleBackColor = true;
+            btn_Connect.UseVisualStyleBackColor = false;
             btn_Connect.Click += btn_Connect_Click;
             // 
             // txt_ServerPort
             // 
+            txt_ServerPort.BackColor = Color.Bisque;
             txt_ServerPort.Location = new Point(566, 41);
             txt_ServerPort.Name = "txt_ServerPort";
             txt_ServerPort.Size = new Size(106, 39);
@@ -163,6 +170,7 @@
             // 
             // txt_IpServer
             // 
+            txt_IpServer.BackColor = Color.Bisque;
             txt_IpServer.Location = new Point(196, 45);
             txt_IpServer.Name = "txt_IpServer";
             txt_IpServer.Size = new Size(275, 39);
@@ -191,6 +199,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.BackColor = Color.AntiqueWhite;
             groupBox2.Controls.Add(button9);
             groupBox2.Controls.Add(button8);
             groupBox2.Controls.Add(button7);
@@ -209,96 +218,97 @@
             // 
             // button9
             // 
+            button9.BackColor = Color.Bisque;
             button9.Location = new Point(502, 295);
             button9.Name = "button9";
             button9.Size = new Size(184, 83);
             button9.TabIndex = 8;
-            button9.Text = "button9";
-            button9.UseVisualStyleBackColor = true;
+            button9.UseVisualStyleBackColor = false;
             button9.Click += button1_Click;
             // 
             // button8
             // 
+            button8.BackColor = Color.Bisque;
             button8.Location = new Point(252, 295);
             button8.Name = "button8";
             button8.Size = new Size(184, 83);
             button8.TabIndex = 7;
-            button8.Text = "button8";
-            button8.UseVisualStyleBackColor = true;
+            button8.UseVisualStyleBackColor = false;
             button8.Click += button1_Click;
             // 
             // button7
             // 
+            button7.BackColor = Color.Bisque;
             button7.Location = new Point(6, 295);
             button7.Name = "button7";
             button7.Size = new Size(184, 83);
             button7.TabIndex = 6;
-            button7.Text = "button7";
-            button7.UseVisualStyleBackColor = true;
+            button7.UseVisualStyleBackColor = false;
             button7.Click += button1_Click;
             // 
             // button6
             // 
+            button6.BackColor = Color.Bisque;
             button6.Location = new Point(502, 176);
             button6.Name = "button6";
             button6.Size = new Size(184, 83);
             button6.TabIndex = 5;
-            button6.Text = "button6";
-            button6.UseVisualStyleBackColor = true;
+            button6.UseVisualStyleBackColor = false;
             button6.Click += button1_Click;
             // 
             // button5
             // 
+            button5.BackColor = Color.Bisque;
             button5.Location = new Point(252, 176);
             button5.Name = "button5";
             button5.Size = new Size(184, 83);
             button5.TabIndex = 4;
-            button5.Text = "button5";
-            button5.UseVisualStyleBackColor = true;
+            button5.UseVisualStyleBackColor = false;
             button5.Click += button1_Click;
             // 
             // button4
             // 
+            button4.BackColor = Color.Bisque;
             button4.Location = new Point(6, 176);
             button4.Name = "button4";
             button4.Size = new Size(184, 83);
             button4.TabIndex = 3;
-            button4.Text = "button4";
-            button4.UseVisualStyleBackColor = true;
+            button4.UseVisualStyleBackColor = false;
             button4.Click += button1_Click;
             // 
             // button3
             // 
+            button3.BackColor = Color.Bisque;
             button3.Location = new Point(502, 60);
             button3.Name = "button3";
             button3.Size = new Size(184, 83);
             button3.TabIndex = 2;
-            button3.Text = "button3";
-            button3.UseVisualStyleBackColor = true;
+            button3.UseVisualStyleBackColor = false;
             button3.Click += button1_Click;
             // 
             // button2
             // 
+            button2.BackColor = Color.Bisque;
             button2.Location = new Point(252, 60);
             button2.Name = "button2";
             button2.Size = new Size(184, 83);
             button2.TabIndex = 1;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
+            button2.UseVisualStyleBackColor = false;
             button2.Click += button1_Click;
             // 
             // button1
             // 
+            button1.BackColor = Color.Bisque;
             button1.Location = new Point(6, 60);
             button1.Name = "button1";
             button1.Size = new Size(184, 83);
             button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // groupBox3
             // 
+            groupBox3.BackColor = Color.AntiqueWhite;
             groupBox3.Controls.Add(lst_Rooms);
             groupBox3.Location = new Point(728, 245);
             groupBox3.Name = "groupBox3";
@@ -309,6 +319,7 @@
             // 
             // lst_Rooms
             // 
+            lst_Rooms.BackColor = Color.Bisque;
             lst_Rooms.FormattingEnabled = true;
             lst_Rooms.ItemHeight = 31;
             lst_Rooms.Location = new Point(6, 59);
@@ -319,6 +330,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.BackColor = Color.AntiqueWhite;
             groupBox4.Controls.Add(dgv_Leaderboard);
             groupBox4.Location = new Point(1112, 26);
             groupBox4.Name = "groupBox4";
@@ -334,15 +346,20 @@
             dgv_Leaderboard.AllowUserToResizeColumns = false;
             dgv_Leaderboard.AllowUserToResizeRows = false;
             dgv_Leaderboard.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgv_Leaderboard.BackgroundColor = Color.Bisque;
+            dgv_Leaderboard.BorderStyle = BorderStyle.Fixed3D;
             dgv_Leaderboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgv_Leaderboard.Columns.AddRange(new DataGridViewColumn[] { Place, Nick, Wins, Losses, Draws, Games });
+            dgv_Leaderboard.Enabled = false;
             dgv_Leaderboard.GridColor = SystemColors.HighlightText;
             dgv_Leaderboard.Location = new Point(6, 38);
+            dgv_Leaderboard.MultiSelect = false;
             dgv_Leaderboard.Name = "dgv_Leaderboard";
             dgv_Leaderboard.ReadOnly = true;
             dgv_Leaderboard.RowHeadersWidth = 51;
             dgv_Leaderboard.Size = new Size(519, 610);
             dgv_Leaderboard.TabIndex = 0;
+            dgv_Leaderboard.TabStop = false;
             // 
             // Place
             // 
@@ -390,6 +407,7 @@
             // 
             AutoScaleDimensions = new SizeF(13F, 31F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.SeaShell;
             ClientSize = new Size(1649, 696);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
