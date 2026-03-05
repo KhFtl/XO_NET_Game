@@ -52,9 +52,12 @@
             button1 = new Button();
             groupBox3 = new GroupBox();
             lst_Rooms = new ListBox();
+            groupBox4 = new GroupBox();
+            lst_Leaderboard = new ListBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -76,6 +79,7 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Керування";
+            groupBox1.Enter += groupBox1_Enter;
             // 
             // btn_updateRoom
             // 
@@ -192,14 +196,14 @@
             groupBox2.Controls.Add(button1);
             groupBox2.Location = new Point(15, 245);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(707, 439);
+            groupBox2.Size = new Size(596, 439);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Ігрове поле";
             // 
             // button9
             // 
-            button9.Location = new Point(502, 295);
+            button9.Location = new Point(412, 295);
             button9.Name = "button9";
             button9.Size = new Size(184, 83);
             button9.TabIndex = 8;
@@ -209,7 +213,7 @@
             // 
             // button8
             // 
-            button8.Location = new Point(252, 295);
+            button8.Location = new Point(209, 295);
             button8.Name = "button8";
             button8.Size = new Size(184, 83);
             button8.TabIndex = 7;
@@ -229,7 +233,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(502, 176);
+            button6.Location = new Point(412, 176);
             button6.Name = "button6";
             button6.Size = new Size(184, 83);
             button6.TabIndex = 5;
@@ -239,7 +243,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(252, 176);
+            button5.Location = new Point(209, 176);
             button5.Name = "button5";
             button5.Size = new Size(184, 83);
             button5.TabIndex = 4;
@@ -259,7 +263,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(502, 60);
+            button3.Location = new Point(412, 59);
             button3.Name = "button3";
             button3.Size = new Size(184, 83);
             button3.TabIndex = 2;
@@ -269,7 +273,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(252, 60);
+            button2.Location = new Point(209, 59);
             button2.Name = "button2";
             button2.Size = new Size(184, 83);
             button2.TabIndex = 1;
@@ -290,9 +294,9 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(lst_Rooms);
-            groupBox3.Location = new Point(728, 245);
+            groupBox3.Location = new Point(897, 245);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(739, 439);
+            groupBox3.Size = new Size(570, 439);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Кімнати";
@@ -307,11 +311,33 @@
             lst_Rooms.TabIndex = 0;
             lst_Rooms.DoubleClick += lst_Rooms_DoubleClick;
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(lst_Leaderboard);
+            groupBox4.Location = new Point(617, 245);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(274, 439);
+            groupBox4.TabIndex = 3;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Таблиця лідерів";
+            groupBox4.Enter += groupBox4_Enter;
+            // 
+            // lst_Leaderboard
+            // 
+            lst_Leaderboard.FormattingEnabled = true;
+            lst_Leaderboard.ItemHeight = 31;
+            lst_Leaderboard.Location = new Point(6, 59);
+            lst_Leaderboard.Name = "lst_Leaderboard";
+            lst_Leaderboard.Size = new Size(259, 376);
+            lst_Leaderboard.TabIndex = 0;
+            lst_Leaderboard.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 31F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1479, 696);
+            Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -325,6 +351,7 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -354,5 +381,7 @@
         private Button btn_createRoom;
         private TextBox txt_roomName;
         private Label label3;
+        private GroupBox groupBox4;
+        private ListBox lst_Leaderboard;
     }
 }

@@ -15,7 +15,7 @@ namespace Server
         public string Nickname { get; set; }
         public GameRoom? CurrentRoom { get; set; } = null;
         public ClientObject(TcpClient client)
-        { 
+        {
             Client = client;
             Stream = client.GetStream();
         }

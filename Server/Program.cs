@@ -18,7 +18,7 @@ namespace Server
             Console.Title = "Сервер гри Хрестики - Нолики";
             var config = ServerConfig.LoadOrAsk();
             if (config == null)
-            { 
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Помилка в файлі конфігурації :( видаліть файл та спробуйте знову");
                 Console.ResetColor();
@@ -68,7 +68,7 @@ namespace Server
         {
             clients.TryRemove(client.Id, out _);
             if (client.CurrentRoom != null)
-            { 
+            {
                 await client.CurrentRoom.PlayerDisconnected(client);
                 rooms.TryRemove(client.CurrentRoom.Name, out _);
                 await BroadcastLobbyList();
@@ -115,7 +115,7 @@ namespace Server
                     if (rooms.TryGetValue(targetRoom, out var room))
                     {
                         if (room.TryJoin(client))
-                        { 
+                        {
                             client.CurrentRoom = room;
                             await BroadcastLobbyList();
                             await room.StartGame();
@@ -127,10 +127,19 @@ namespace Server
                     }
                     break;
                 case "MOVE":
-                    if (client.CurrentRoom != null)
-                    { 
-                        int index = int.Parse(parts[1]);
-                        await client.CurrentRoom.HandleMoveAsync(client, index);
+                    {
+                        if (client.CurrentRoom != null)
+                        {
+                            int index = int.Parse(parts[1]);
+                            var currentRoom = client.CurrentRoom;
+                            await currentRoom.HandleMoveAsync(client, index);
+
+                            if (client.CurrentRoom == null)
+                            {
+                                rooms.TryRemove(currentRoom.Name, out _);
+                                await BroadcastLobbyList();
+                            }
+                        }
                     }
                     break;
                 case "REFRESH_LOBBY":
@@ -144,6 +153,9 @@ namespace Server
             var openRooms = rooms.Values.Where(r => !r.IsFull).Select(r => r.Name);
             string list = string.Join(",", openRooms);
             await client.SendMessageAsync($"LOBBY_LIST|{list}");
+
+            string leaders = LeaderboardManager.GetLeaderboardString();
+            await client.SendMessageAsync($"LEADERBOARD|{leaders}");
         }
     }
 }

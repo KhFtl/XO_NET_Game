@@ -6,13 +6,13 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        private TcpClient client;
-        private NetworkStream stream;
+        private TcpClient? client;
+        private NetworkStream? stream;
         private Button[] gameButtons = new Button[9];
         private bool isConnected = false;
 
-        private string NickName; // Ігровий нікнейм
-        private string mySymbol; // "X" або "O"
+        private string NickName = ""; // Ігровий нікнейм
+        private string mySymbol = ""; // "X" або "O"
         private int pressedIndex = -1; // Індекс останньої натиснутої кнопки
         public Form1()
         {
@@ -28,26 +28,23 @@ namespace Client
 
         private async Task SendPacket(string msg)
         {
-            if (!isConnected) return;
+            if (!isConnected || stream == null) return;
             try
             {
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 await stream.WriteAsync(data, 0, data.Length);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Помилка відправки даних: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch { /* ... */ }
         }
 
         private async void button1_Click(object sender, EventArgs e)
         {
             if (!groupBox2.Enabled)
-            { 
+            {
                 MessageBox.Show("Ви не можете зробити хід зараз!", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
+
             Button btn = (Button)sender;
             if (!string.IsNullOrEmpty(btn.Text))
             {
@@ -56,7 +53,7 @@ namespace Client
             }
             int index = Array.IndexOf(gameButtons, btn);
             if (index != -1)
-            { 
+            {
                 await SendPacket($"MOVE|{index}");
             }
         }
@@ -159,6 +156,22 @@ namespace Client
                     MessageBox.Show("Ваш супротивник вийшов з гри!", "Гра завершена", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetGameUI();
                     break;
+                case "LEADERBOARD":
+                    this.Invoke((MethodInvoker)delegate {
+                        lst_Leaderboard.Items.Clear();
+                        if (parts.Length > 1)
+                        {
+                            var entries = parts[1].Split('|');
+                            foreach (var entry in entries)
+                            {
+                                if (!string.IsNullOrWhiteSpace(entry))
+                                {
+                                    lst_Leaderboard.Items.Add(entry);
+                                }
+                            }
+                        }
+                    });
+                    break;
                 case "ERROR":
                     MessageBox.Show($"Помилка від сервера: {parts[1]}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
@@ -181,18 +194,14 @@ namespace Client
 
         private void UpdateBoard(int index, string symbol)
         {
-            if (index >= 0 && index < gameButtons.Length)
-            {
-                gameButtons[index].Text = symbol;
-                if (symbol == "X")
-                {
-                    gameButtons[index].BackColor = Color.Yellow;
-                }
-                else
-                {
-                    gameButtons[index].BackColor = Color.Blue;
-                }
-            }
+            gameButtons[index].Text = symbol;
+            gameButtons[index].Font = new Font("Arial", 24, FontStyle.Bold);
+            gameButtons[index].ForeColor = Color.White;
+
+            if (symbol == "X")
+                gameButtons[index].BackColor = Color.FromArgb(231, 76, 60);
+            else
+                gameButtons[index].BackColor = Color.FromArgb(52, 152, 219);
         }
 
         private void StartGameUI(string opponent)
@@ -225,14 +234,32 @@ namespace Client
         {
             if (lst_Rooms.SelectedItems != null)
             {
-                string roomName = lst_Rooms.SelectedItem.ToString();
-                await SendPacket($"JOIN_ROOM|{roomName}");
+                string? selectedItem = lst_Rooms.SelectedItem?.ToString();
+                if (selectedItem != null)
+                {
+                    await SendPacket($"JOIN_ROOM|{selectedItem}");
+                }
             }
         }
 
         private async void btn_updateRoom_Click(object sender, EventArgs e)
         {
             await SendPacket("REFRESH_LOBBY");
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

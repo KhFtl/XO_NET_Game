@@ -31,7 +31,7 @@ namespace Server
         }
 
         public async Task StartGame()
-        { 
+        {
             board = new int[9];
             currentPlayer = Player1;
             await Player1!.SendMessageAsync($"GAME_START|X|{Player2!.Nickname}");
@@ -48,6 +48,7 @@ namespace Server
 
             if (CheckWin(symbolId))
             {
+                LeaderboardManager.AddWin(player.Nickname);
                 await Broadcast($"WIN|{player.Nickname}");
                 await EndGame();
             }
@@ -57,7 +58,7 @@ namespace Server
                 await EndGame();
             }
             else
-            { 
+            {
                 currentPlayer = (currentPlayer == Player1) ? Player2 : Player1;
                 string nextTurnNick = currentPlayer!.Nickname;
                 await Broadcast($"TURN|{nextTurnNick}");
@@ -65,10 +66,10 @@ namespace Server
         }
 
         public async Task PlayerDisconnected(ClientObject client)
-        { 
+        {
             var other = (client == Player1) ? Player2 : Player1;
             if (other != null)
-            { 
+            {
                 await other.SendMessageAsync("OPPONENT_LEFT");
                 other.CurrentRoom = null;
             }
@@ -105,13 +106,13 @@ namespace Server
         private async Task EndGame()
         {
             Player1.CurrentRoom = null;
-            if(Player2 != null) Player2.CurrentRoom = null;
+            if (Player2 != null) Player2.CurrentRoom = null;
         }
 
         private async Task Broadcast(string msg)
         {
-            if(Player1 != null) await Player1.SendMessageAsync(msg);
-            if(Player2 != null) await Player2.SendMessageAsync(msg);
+            if (Player1 != null) await Player1.SendMessageAsync(msg);
+            if (Player2 != null) await Player2.SendMessageAsync(msg);
         }
     }
 }
